@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:essentials="clr-namespace:Xamarin.Essentials;assembly=Xamarin.Essentials"
+             xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
+             xmlns:map="clr-namespace:CountryMap.Map;assembly=CountryMap"
+             mc:Ignorable="d"
+             x:Class="CountryMap.MainPage">
+
+    <Grid Padding="12" RowSpacing="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <ListView RowHeight="60" SeparatorVisibility="None" ItemsSource="{Binding Countries}" SelectionMode="Single" SelectedItem="{Binding SelectedCountry, Mode=TwoWay}">
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="map:Country">
+                    <ViewCell>
+                        <Grid Padding="12">
+                            <Label VerticalOptions="Center" Text="{Binding Name}" TextColor="Black" FontAttributes="Bold" FontSize="20" />
+                        </Grid>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <map:HighlightableMap x:Name="Map" Grid.Row="1" />
+    </Grid>
+
+</ContentPage>
