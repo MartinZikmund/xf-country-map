@@ -16,7 +16,6 @@ namespace CountryMap.iOS.Renderers
 {
     public class HighlightableMapRenderer : MapRenderer
     {
-        private IMKOverlay[] _currentOverlays;
         private MapHighlight _currentHighlight;
 
         protected override void OnElementChanged(ElementChangedEventArgs<View> e)
@@ -25,8 +24,7 @@ namespace CountryMap.iOS.Renderers
 
             if (e.OldElement != null)
             {
-                var nativeMap = Control as MKMapView;
-                if (nativeMap != null)
+                if (Control is MKMapView nativeMap)
                 {
                     nativeMap.RemoveOverlays(nativeMap.Overlays);
                     nativeMap.OverlayRenderer = null;
@@ -35,10 +33,10 @@ namespace CountryMap.iOS.Renderers
 
             if (e.NewElement != null)
             {
-                var formsMap = (HighlightableMap)e.NewElement;
                 if (Control is MKMapView nativeMap)
                 {
                     nativeMap.OverlayRenderer = OverlayRendererHandler;
+                    OnUpdateHighlight();
                 }
             }
         }
@@ -58,10 +56,7 @@ namespace CountryMap.iOS.Renderers
             var nativeMap = Control as MKMapView;
             if (highlightableMap == null || nativeMap == null) return;
 
-            if (_currentOverlays != null)
-            {
-                nativeMap.RemoveOverlays(_currentOverlays);
-            }
+            nativeMap.RemoveOverlays(nativeMap.Overlays);
 
             if (highlightableMap?.Highlight == null) return;
 
@@ -80,8 +75,7 @@ namespace CountryMap.iOS.Renderers
                 overlays.Add(blockOverlay);
             }
 
-            _currentOverlays = overlays.ToArray();
-            nativeMap.AddOverlays(_currentOverlays);
+            nativeMap.AddOverlays(overlays.ToArray());
         }
 
         private MKOverlayRenderer OverlayRendererHandler(MKMapView mapView, IMKOverlay overlayWrapper)
