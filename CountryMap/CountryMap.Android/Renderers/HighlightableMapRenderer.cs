@@ -48,6 +48,13 @@ namespace CountryMap.Droid.Renderers
             }
         }
 
+        protected override void OnMapReady(Android.Gms.Maps.GoogleMap map)
+        {
+            base.OnMapReady(map);
+
+            OnUpdateHighlight();
+        }
+
         private void OnUpdateHighlight()
         {
             var highlightableMap = (HighlightableMap)Element;
@@ -78,11 +85,6 @@ namespace CountryMap.Droid.Renderers
             }
         }
 
-        protected override void OnMapReady(Android.Gms.Maps.GoogleMap map)
-        {
-            base.OnMapReady(map);
-
-            OnUpdateHighlight();
-        }
+        
     }
 }
