@@ -20,23 +20,28 @@ namespace CountryMap
     [DesignTimeVisible(false)]
     public partial class MainPage : ContentPage
     {
-        private readonly FeatureCollection _countryPolygons = null;
+        private FeatureCollection _countryPolygons = null;
         private Country _selectedCountry;
 
         public MainPage()
         {
             InitializeComponent();
             BindingContext = this;
+            InitData();
+        }
+
+        private void InitData()
+        {
             _countryPolygons = JsonConvert.DeserializeObject<FeatureCollection>(ReadCountryGeoJson());
-            Countries = 
+            Countries =
                 _countryPolygons.Features
                     .Select(f => new Country(f.Id, f.Properties["name"].ToString()))
-                    .OrderBy(c=>c.Name)
+                    .OrderBy(c => c.Name)
                     .ToArray();
             OnPropertyChanged(nameof(Countries));
         }
 
-        public Country[] Countries { get; }
+        public Country[] Countries { get; private set; }
 
         public Country SelectedCountry
         {
