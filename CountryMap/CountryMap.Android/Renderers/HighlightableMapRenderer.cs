@@ -44,11 +44,11 @@ namespace CountryMap.Droid.Renderers
             base.OnElementPropertyChanged(sender, e);
             if (e.PropertyName == nameof(HighlightableMap.Highlight))
             {
-                UpdateHighlight();
+                OnUpdateHighlight();
             }
         }
 
-        private void UpdateHighlight()
+        private void OnUpdateHighlight()
         {
             var highlightableMap = (HighlightableMap)Element;
             if (highlightableMap == null || NativeMap == null) return;
@@ -82,7 +82,7 @@ namespace CountryMap.Droid.Renderers
         {
             base.OnMapReady(map);
 
-            UpdateHighlight();
+            OnUpdateHighlight();
         }
     }
 }

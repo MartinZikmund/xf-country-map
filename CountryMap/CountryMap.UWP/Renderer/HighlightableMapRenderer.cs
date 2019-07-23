@@ -19,7 +19,7 @@ namespace CountryMap.UWP.Renderer
 
             if (e.NewElement != null)
             {
-                UpdateHighlight();
+                OnUpdateHighlight();
             }
         }
 
@@ -28,11 +28,11 @@ namespace CountryMap.UWP.Renderer
             base.OnElementPropertyChanged(sender, e);
             if (e.PropertyName == nameof(HighlightableMap.Highlight))
             {
-                UpdateHighlight();
+                OnUpdateHighlight();
             }
         }
 
-        private void UpdateHighlight()
+        private void OnUpdateHighlight()
         {
             var highlightableMap = (HighlightableMap)Element;
             var nativeMap = Control as MapControl;
