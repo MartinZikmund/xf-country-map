@@ -62,9 +62,11 @@ namespace CountryMap
                 f.Id.Equals(country, StringComparison.CurrentCultureIgnoreCase));
             if (feature == null) return;
 
+            //Create map polygons
             var polygons = new List<MapPolygon>();
             if (feature.Geometry.Type == GeoJSONObjectType.MultiPolygon)
             {
+                //Country area consists of multiple polygons
                 var multiPolygonGeometry = feature.Geometry as MultiPolygon;
                 foreach (var polygonGeometry in multiPolygonGeometry.Coordinates)
                 {
@@ -77,6 +79,7 @@ namespace CountryMap
             }
             else if (feature.Geometry.Type == GeoJSONObjectType.Polygon)
             {
+                //Single polygon
                 var polygonGeometry = feature.Geometry as Polygon;
                 var polygon = GeoJsonPolygonToMapPolygon(polygonGeometry);
                 if (polygon != null)
@@ -85,13 +88,7 @@ namespace CountryMap
                 }
             }
 
-            var minLat = polygons.SelectMany(p => p.Positions).Min(p => p.Latitude);
-            var maxLat = polygons.SelectMany(p => p.Positions).Max(p => p.Latitude);
-            var minLon = polygons.SelectMany(p => p.Positions).Min(p => p.Longitude);
-            var maxLon = polygons.SelectMany(p => p.Positions).Max(p => p.Longitude);
-            var centerLat = (minLat + maxLat) / 2;
-            var centerLon = (minLon + maxLon) / 2;
-
+            //Create the map highlight
             var highlight = new MapHighlight(polygons.ToArray())
             {
                 FillColor = Color.FromRgba(255, 0, 0, 128),
@@ -99,13 +96,20 @@ namespace CountryMap
                 StrokeThickness = 3
             };
 
-
             Map.Highlight = highlight;
 
+            //Show the user the appropriate map area
+            var minLat = polygons.SelectMany(p => p.Positions).Min(p => p.Latitude);
+            var maxLat = polygons.SelectMany(p => p.Positions).Max(p => p.Latitude);
+            var minLon = polygons.SelectMany(p => p.Positions).Min(p => p.Longitude);
+            var maxLon = polygons.SelectMany(p => p.Positions).Max(p => p.Longitude);
+            var centerLat = (minLat + maxLat) / 2;
+            var centerLon = (minLon + maxLon) / 2;
+            
             Map.MoveToRegion(
                 new MapSpan(
-                    new Position(centerLat, centerLon), 
-                    Math.Abs(maxLat - minLat) * 1.2, 
+                    new Position(centerLat, centerLon),
+                    Math.Abs(maxLat - minLat) * 1.2,
                     Math.Abs(maxLon - minLon) * 1.2));
         }
 
